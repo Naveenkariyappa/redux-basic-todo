@@ -1,26 +1,34 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import Todos from "./Todos";
+import AddForm from "./AddForm";
+import { connect } from "react-redux";
+import { deleteTodo } from "./actions/deleteTodoAction";
 
-function App() {
+function App(props) {
+  const todos = props.todos;
+  const deleteTodoById = id => {
+    props.deleteTodo(id);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="todo-app container ">
+      <h1 className="center blue-text">Todos</h1>
+      <Todos todo={todos} deleteTodo={deleteTodoById} />
+      <AddForm/>
     </div>
   );
 }
 
-export default App;
+const mapStateToProps = todos => {
+  return todos;
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    deleteTodo: id => {
+      dispatch(deleteTodo(id));
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
